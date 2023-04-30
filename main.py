@@ -24,7 +24,11 @@ def save(fts, bl):
     new_backup_folder = bl + "/backup_" + date_time
 
     # print(new_backup_folder)
-    os.mkdir(new_backup_folder)
+    if not os.path.exists(new_backup_folder):    
+        os.mkdir(new_backup_folder)
+    else:
+        print("Folder :" + new_backup_folder + " already exist. Its contents will be overwritten")
+
     for file_or_folder in os.listdir(fts):
         #combine file name and path 
         #if we don't combine, shutil.copy wont be able to find the file/folder for copying  
