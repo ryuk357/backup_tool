@@ -2,10 +2,10 @@
 import shutil
 import os
 import datetime
+import filecmp
 
 #automated files backup script -> (cron or task scheduler)
-#todo : - delete backup > 7 days
-#       - check if the content of folder_to_save is the same as the folder in backup_location
+#todo : - check if the content of folder_to_save is the same as the folder in backup_location
 
 ##########################################
 ##########################################
@@ -33,6 +33,12 @@ def save(fts, bl):
             shutil.copytree(file_or_forlder_name, os.path.join(new_backup_folder, file_or_folder))
         else:
             shutil.copy(file_or_forlder_name, new_backup_folder)
+    
+    #compare to check if folders have the same content
+    if filecmp.dircmp(new_backup_folder, fts):
+        print("backup : '"+datetime.datetime.now().strftime("%Y-%m-%d")+"': done")
+    else:
+        print("!!! WARNING !!! backup : '"+datetime.datetime.now().strftime("%Y-%m-%d")+"': fail")
 
 #delete old backup (older than 7 days)
 def rm_old_backup(bl):
