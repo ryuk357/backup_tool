@@ -15,6 +15,8 @@ import datetime
 
 folder_to_save = "/home/ryuk/Documents/backuptest"
 backup_location = "/home/ryuk/Documents/savetest"
+#retention limit of backup (day)
+date_limit = 7
 
 #saving method
 def save(fts, bl):
@@ -32,14 +34,17 @@ def save(fts, bl):
         else:
             shutil.copy(file_or_forlder_name, new_backup_folder)
 
+#delete old backup (older than 7 days)
 def rm_old_backup(bl):
     for backup_folder in os.listdir(bl):
+        #convert folder name to date 
         date_backup = backup_folder.split("_")
         date_backup = date_backup[1]
         date_backup = datetime.datetime.strptime(date_backup, "%Y-%m-%d")
         date_now = datetime.datetime.now()
+        #calculate day difference between the current date and backup folder date
         date_difference = (date_now - date_backup).days
-        if date_difference > 7:
+        if date_difference > date_limit:
             folder_to_delete = os.path.join(bl, backup_folder)
             shutil.rmtree(folder_to_delete)
 
